@@ -1,14 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
+import { PRIMARY } from '../colors';
+import { signOut,getAuth } from 'firebase/auth';
 const Account = () => {
   // Dummy user data
   const user = {
     name: "John Doe",
     profilePicture: require('../assets/man.png')
   };
-
+  const auth= getAuth()
   return (
     <View style={styles.container}>
       {/* User Info */}
@@ -27,7 +28,7 @@ const Account = () => {
           <Feather name="file-text" size={24} color="#1976D2" />
           <Text style={styles.tabText}>Terms and Conditions</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={()=>signOut(auth)}>
           <Feather name="log-out" size={24} color="#FF5252" />
           <Text style={styles.tabText}>Logout</Text>
         </TouchableOpacity>
@@ -39,7 +40,7 @@ const Account = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: PRIMARY,
     paddingHorizontal: 20,
     paddingTop: 50,
   },
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333333',
+    color: 'white',
   },
   tabsContainer: {
     borderTopWidth: 1,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   tabText: {
     marginLeft: 10,
     fontSize: 16,
-    color: '#333333',
+    color: 'white',
   },
 });
 

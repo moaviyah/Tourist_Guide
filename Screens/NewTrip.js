@@ -8,6 +8,8 @@ import { Image } from 'react-native';
 import { PRIMARY } from '../colors';
 import * as Location from 'expo-location';
 import { getDatabase, ref, push } from 'firebase/database';
+import {getAuth} from 'firebase/auth'
+
 const NewTrip = ({ navigation }) => {
   const [destination, setDestination] = useState('');
   const [numberOfPeople, setNumberOfPeople] = useState('');
@@ -20,7 +22,7 @@ const NewTrip = ({ navigation }) => {
   const [locationAddress, setLocationAddress] = useState('')
   const [destinationAddress, setDestinationAddress] = useState('')
   const db = getDatabase()
-  
+  const auth = getAuth()
   useEffect(() => {
     // Request permission to access location
     (async () => {
@@ -117,9 +119,13 @@ const NewTrip = ({ navigation }) => {
      date: departureDate,
      people:numberOfPeople,
      days: stayingDays,
+     uid: auth.currentUser.uid
     }
     push(tripsRef, tripData).then(()=>{
       Alert.alert('Trip created successfully')
+      setDestination('')
+      setNumberOfPeople('')
+      setStayingDays('')
     })
     .catch((error)=>{
       console.log(error);

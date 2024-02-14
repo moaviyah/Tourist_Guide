@@ -9,6 +9,10 @@ import CreateAccount from "./Screens/CreateAccount";
 import CreateTrips from "./Screens/CreateTrips";
 import Navigator from "./Screens/Navigator";
 import NewTrip from "./Screens/NewTrip";
+import Weather from "./Screens/Weather";
+import Details from "./Screens/Details";
+
+
 export default function App() {
   const [user, setUser] = useState(null);
   const Stack = createStackNavigator();
@@ -28,9 +32,10 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user ? (
           <>
-            <Stack.Screen name="Dashboard" component={Navigator} />
+            <Stack.Screen name="Dashboard" component={Navigator}/>
             <Stack.Screen name="NewTrip" component={NewTrip} />
-
+            <Stack.Screen name="Weather" component={Weather}/>
+            <Stack.Screen name="Details" component={Details}/>
           </>
         ) : (
           <>

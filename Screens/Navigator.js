@@ -64,7 +64,7 @@ const Navigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <FontAwesome name="suitcase" size={34} color={focused ? PRIMARY : '#A9A9A9'} />
-                            <Text style={{ color: focused ? PRIMARY : '#A9A9A9', fontSize: 12 }}>Create</Text>
+                            <Text style={{ color: focused ? PRIMARY : '#A9A9A9', fontSize: 12 }}>Explore</Text>
                         </View>
                     )
                 }}

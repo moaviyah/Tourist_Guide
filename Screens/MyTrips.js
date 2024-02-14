@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { MaterialIcons } from '@expo/vector-icons'; // Import appropriate icons from Expo vector icons library
 import { PRIMARY } from '../colors';
 
-const MyTrips = () => {
+const MyTrips = ({navigation}) => {
   const [trips, setTrips] = useState([]);
   const auth = getAuth();
   const db = getDatabase();
@@ -45,42 +45,44 @@ const MyTrips = () => {
     const lng1 = item.location.longitude
     const lat2 = item.destination.lat
     const lng2 = item.destination.lng
-    return(    
-    <View style={styles.tripItem}>
-
-      <View style={styles.tripDetails}>
-        <Image source={require('../assets/flags.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
-        <Text style={styles.addressText}><Text style={{ fontWeight: '700' }}>Starting from:</Text> {item.locationAddress}</Text>
-      </View>
-      <View style={styles.tripDetails}>
-        <Image source={require('../assets/destination.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
-        <Text style={styles.addressText}><Text style={{ fontWeight: '700' }}>Destination:</Text> {item.destinationAddress}</Text>
-      </View>
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#ccc', justifyContent: 'space-between' }}>
-        <View style={styles.distanceContainer}>
-          <MaterialIcons name="directions" size={24} color={PRIMARY} />
-          <Text style={styles.distanceValue}>{item.distance} km</Text>
+    return (
+      <View style={styles.tripItem}>
+        <View style={styles.tripDetails}>
+          <Image source={require('../assets/flags.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
+          <Text style={styles.addressText}><Text style={{ fontWeight: '700' }}>Starting from:</Text> {item.locationAddress}</Text>
         </View>
-        <TouchableOpacity style={[styles.distanceContainer, { backgroundColor: '#00796B' }]}
-        
+        <View style={styles.tripDetails}>
+          <Image source={require('../assets/destination.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
+          <Text style={styles.addressText}><Text style={{ fontWeight: '700' }}>Destination:</Text> {item.destinationAddress}</Text>
+        </View>
+        <View style={{ flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#ccc', justifyContent: 'space-between' }}>
+          <View style={styles.distanceContainer}>
+            <MaterialIcons name="directions" size={24} color={PRIMARY} />
+            <Text style={styles.distanceValue}>{item.distance} km</Text>
+          </View>
+          <TouchableOpacity style={[styles.distanceContainer, { backgroundColor: '#00796B' }]}
+            onPress={()=>navigation.navigate('Weather', {item})}
+          >
+            <Image source={require('../assets/rain.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
+            <Text style={{ fontWeight: 'bold', color: 'white' }}>
+              Check Weather
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.navigateButton}
+          onPress={() => { handleNavigate(lat1, lng1, lat2, lng2) }}
         >
-          <Image source={require('../assets/rain.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
-          <Text style={{ fontWeight: 'bold', color: 'white' }}>
-            Check Weather
-          </Text>
+          <Image source={require('../assets/navigate.png')} style={styles.navigateIcon} />
+          <Text style={styles.navigateText}>Navigate</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+        style={[styles.navigateButton, { backgroundColor: '#70B1F8' }]}
+        onPress={()=>navigation.navigate('Details', {item})}
+        >
+          <Image source={require('../assets/more.png')} style={styles.navigateIcon} />
+          <Text style={[styles.navigateText, { color: 'white', fontWeight: 'bold' }]}>See Details</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.navigateButton}
-      onPress={()=>{handleNavigate(lat1, lng1, lat2, lng2)}}
-      >
-        <Image source={require('../assets/navigate.png')} style={styles.navigateIcon} />
-        <Text style={styles.navigateText}>Navigate</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.navigateButton, { backgroundColor: '#70B1F8' }]}>
-        <Image source={require('../assets/more.png')} style={styles.navigateIcon} />
-        <Text style={[styles.navigateText, { color: 'white', fontWeight: 'bold' }]}>See Details</Text>
-      </TouchableOpacity>
-    </View>
     )
   }
 

@@ -6,10 +6,38 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { BACKGROUND, PRIMARY } from "../colors";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { getDatabase, ref, onValue, off } from 'firebase/database';
+
+const API_KEY = 'AIzaSyB9zgTdLN3KTUB9fJWDiAwDyE2QWQUX5qk';
+
 const CreateTrips = ({ navigation }) => {
+  const [endedTrips, setEndedTrips] = useState([]);
+  useEffect(() => {
+    const db = getDatabase();
+    const endedTripsRef = ref(db, 'completedTrips');
+
+    // Listen for changes in the database
+    onValue(endedTripsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const endedTripsArray = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        console.log('ended',endedTripsArray)
+        setEndedTrips(endedTripsArray);
+      }
+    });
+
+    // Cleanup function
+    return () => {
+      // Detach the listener when the component unmounts
+      off(endedTripsRef);
+    };
+  }, []);
   const categories = [
     { id: 1, title: "Lakes", imageSource: require("../assets/lake.png") },
     { id: 2, title: "Sea", imageSource: require("../assets/sea.png") },
@@ -30,36 +58,9 @@ const CreateTrips = ({ navigation }) => {
     );
   };
 
-  const trips = [
-    {
-      id: 1,
-      name: "Swat Lake",
-      imageSource: require("../assets/tripImage1.png"),
-      rating: 4.5,
-      location: "Swat",
-      price: "PKR5000",
-      isFavourite: true,
-    },
-    {
-      id: 2,
-      name: "Malam Jabba",
-      imageSource: require("../assets/tripImage2.png"),
-      rating: 4.2,
-      location: "Kalam",
-      price: "PKR7000",
-      isFavourite: true,
-    },
-    {
-      id: 3,
-      name: "Saiful Muluk",
-      imageSource: require("../assets/tripImage3.png"),
-      rating: 4.2,
-      location: "Mansehra",
-      price: "PKR12000",
-      isFavourite: false,
-    },
-    // Add more trips as needed
-  ];
+  const getImageUrl = (photo_reference, width, height) => {
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${width}&maxheight=${height}&photoreference=${photo_reference}&key=${API_KEY}`;
+  };
 
   const TripItem = ({
     name,
@@ -68,12 +69,16 @@ const CreateTrips = ({ navigation }) => {
     location,
     price,
     isFavourite,
+    description
   }) => {
     return (
       <View style={styles.tripItem}>
-        <Image source={imageSource} style={styles.tripImage} />
+        <Image source={{uri:getImageUrl(imageSource.photo_reference, imageSource.width, imageSource.height)}} style={styles.tripImage} />
         <Text style={styles.tripName}>{name}</Text>
+        <View style={{flexDirection:'row'}}>
         <Text style={styles.tripRating}>Rating: {rating}</Text>
+        <Icon name="star" size={10} style={{alignSelf:'center'}} color={'grey'}/>
+        </View>
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}
         >
@@ -87,17 +92,15 @@ const CreateTrips = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <View
-            style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}
-          >
-            <Text style={styles.tripPrice}>{price}</Text>
-            <Text>/Visit</Text>
-          </View>
+          <Text style={{fontSize:11, marginTop:5}}>
+            {description}
+          </Text>
           <Icon
             name={isFavourite ? "heart" : "heart-o"}
             size={24}
             color={isFavourite ? "red" : "#333"}
           />
+          
         </View>
       </View>
     );
@@ -160,21 +163,19 @@ const CreateTrips = ({ navigation }) => {
         >
           Top Destinations
         </Text>
-        <Text style={{ color: "white", fontWeight: "400", fontSize: 16 }}>
-          See All
-        </Text>
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {trips.map((trip) => (
+        {endedTrips && endedTrips.map((trips) => (
           <TripItem
-            key={trip.id}
-            name={trip.name}
-            imageSource={trip.imageSource}
-            rating={trip.rating}
-            location={trip.location}
-            price={trip.price}
-            isFavourite={trip.isFavourite}
+            key={trips.id}
+            name={trips.address}
+            imageSource={trips.image}
+            rating={trips.rating}
+            location={trips.lat}
+            isFavourite={trips.isFavourite}
+            description={trips.description}
           />
+
         ))}
       </ScrollView>
     </View>

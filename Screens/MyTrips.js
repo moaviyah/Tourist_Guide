@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { MaterialIcons } from '@expo/vector-icons'; // Import appropriate icons from Expo vector icons library
 import { PRIMARY } from '../colors';
 
-const MyTrips = ({navigation}) => {
+const MyTrips = ({ navigation }) => {
   const [trips, setTrips] = useState([]);
   const auth = getAuth();
   const db = getDatabase();
@@ -24,7 +24,7 @@ const MyTrips = ({navigation}) => {
             };
             tripsData.push(trip);
           });
-          setTrips(tripsData);
+          setTrips(tripsData.reverse());
         } else {
           console.log('No data available');
         }
@@ -61,7 +61,7 @@ const MyTrips = ({navigation}) => {
             <Text style={styles.distanceValue}>{item.distance} km</Text>
           </View>
           <TouchableOpacity style={[styles.distanceContainer, { backgroundColor: '#00796B' }]}
-            onPress={()=>navigation.navigate('Weather', {item})}
+            onPress={() => navigation.navigate('Weather', { item })}
           >
             <Image source={require('../assets/rain.png')} style={{ height: 24, width: 24, marginRight: 5 }} />
             <Text style={{ fontWeight: 'bold', color: 'white' }}>
@@ -75,9 +75,9 @@ const MyTrips = ({navigation}) => {
           <Image source={require('../assets/navigate.png')} style={styles.navigateIcon} />
           <Text style={styles.navigateText}>Navigate</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-        style={[styles.navigateButton, { backgroundColor: '#70B1F8' }]}
-        onPress={()=>navigation.navigate('Details', {item})}
+        <TouchableOpacity
+          style={[styles.navigateButton, { backgroundColor: '#70B1F8' }]}
+          onPress={() => navigation.navigate('Details', { item })}
         >
           <Image source={require('../assets/more.png')} style={styles.navigateIcon} />
           <Text style={[styles.navigateText, { color: 'white', fontWeight: 'bold' }]}>See Details</Text>

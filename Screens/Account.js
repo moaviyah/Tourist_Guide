@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { PRIMARY } from '../colors';
 import { signOut,getAuth } from 'firebase/auth';
-const Account = () => {
+const Account = ({navigation}) => {
   // Dummy user data
   const user = {
     name: "John Doe",
@@ -12,19 +12,16 @@ const Account = () => {
   const auth= getAuth()
   return (
     <View style={styles.container}>
-      {/* User Info */}
-      <View style={styles.userInfoContainer}>
-        <Image source={user.profilePicture} style={styles.profilePicture} />
-        <Text style={styles.userName}>{user.name}</Text>
-      </View>
-
+      <Text style={{color:'white', fontSize:24, fontWeight:'bold'}}>
+        Settings
+      </Text>
       {/* Tabs */}
       <View style={styles.tabsContainer}>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('Privacy')}>
           <Feather name="shield" size={24} color="#4CAF50" />
           <Text style={styles.tabText}>Privacy Policy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tab}>
+        <TouchableOpacity style={styles.tab} onPress={()=>navigation.navigate('Terms')}>
           <Feather name="file-text" size={24} color="#1976D2" />
           <Text style={styles.tabText}>Terms and Conditions</Text>
         </TouchableOpacity>
@@ -61,9 +58,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   tabsContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#CCCCCC',
-    paddingTop: 30,
+    marginTop: 30,
+    marginVertical:10
   },
   tab: {
     flexDirection: 'row',
@@ -71,11 +67,14 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
+    marginVertical:5,
+    backgroundColor:'white',
+    borderRadius:5,
+    paddingHorizontal:10
   },
   tabText: {
     marginLeft: 10,
     fontSize: 16,
-    color: 'white',
   },
 });
 

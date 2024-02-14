@@ -11,6 +11,8 @@ import Navigator from "./Screens/Navigator";
 import NewTrip from "./Screens/NewTrip";
 import Weather from "./Screens/Weather";
 import Details from "./Screens/Details";
+import Privacy from "./Screens/Privacy";
+import Terms from "./Screens/Terms";
 
 
 export default function App() {
@@ -36,6 +38,9 @@ export default function App() {
             <Stack.Screen name="NewTrip" component={NewTrip} />
             <Stack.Screen name="Weather" component={Weather}/>
             <Stack.Screen name="Details" component={Details}/>
+            <Stack.Screen name="Privacy" component={Privacy}/>
+            <Stack.Screen name="Terms" component={Terms}/>
+
           </>
         ) : (
           <>

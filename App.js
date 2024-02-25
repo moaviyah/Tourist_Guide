@@ -14,7 +14,6 @@ import Details from "./Screens/Details";
 import Privacy from "./Screens/Privacy";
 import Terms from "./Screens/Terms";
 
-
 export default function App() {
   const [user, setUser] = useState(null);
   const Stack = createStackNavigator();
@@ -27,19 +26,19 @@ export default function App() {
     // Cleanup function
     return () => unsubscribe();
   }, []);
-  
+
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user ? (
           <>
-            <Stack.Screen name="Dashboard" component={Navigator}/>
+            <Stack.Screen name="Dashboard" component={Navigator} />
             <Stack.Screen name="NewTrip" component={NewTrip} />
-            <Stack.Screen name="Weather" component={Weather}/>
-            <Stack.Screen name="Details" component={Details}/>
-            <Stack.Screen name="Privacy" component={Privacy}/>
-            <Stack.Screen name="Terms" component={Terms}/>
+            <Stack.Screen name="Weather" component={Weather} />
+            <Stack.Screen name="Details" component={Details} />
+            <Stack.Screen name="Privacy" component={Privacy} />
+            <Stack.Screen name="Terms" component={Terms} />
 
           </>
         ) : (
